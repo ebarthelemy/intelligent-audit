@@ -29,7 +29,7 @@ class InvoiceHeader extends Model
     */
    public function getInvoiceDateAttribute($value)
    {
-       return Carbon::createFromFormat('Y-m-d', $value)->format('m/d/Y');
+       return Carbon::createFromFormat('Y-m-d', $value)->format('n/j/Y');
    }
 
    /**
@@ -40,6 +40,6 @@ class InvoiceHeader extends Model
     */
    public function setInvoiceDateAttribute($value)
    {
-       $this->attributes['invoice_date'] = Carbon::createFromFormat('m/d/Y', $value)->format('Y-m-d');
+       $this->attributes['invoice_date'] = Carbon::createFromFormat('n/j/Y', $value)->format('Y-m-d');
    }
 }

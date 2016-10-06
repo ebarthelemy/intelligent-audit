@@ -23,7 +23,7 @@ class InvoiceHeadersTableSeeder extends Seeder
             'invoice_num' => '00551199',
             'invoice_amount' => 10
         ]);
-        $invoiceHeader2->invoice_date = '1/1/2014';
+        $invoiceHeader2->invoice_date = '1/2/2014';
         $invoiceHeader2->save();
     }
 }
