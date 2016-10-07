@@ -15,14 +15,25 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/invoice-headers', function () {
-    return App\InvoiceHeader::all();
-});
+/*
+ * Invoices
+ */
 
-Route::get('/invoice-details', function () {
-    return App\InvoiceDetail::all();
-});
+// Report 1
+Route::get('/invoices/{from}/{to}', [
+    'uses' => 'InvoicesController@printAll'
+]);
 
-Route::get('/invoice-charges', function () {
-    return App\InvoiceDetail::all();
-});
+// Report 2
+Route::get('/invoices/{from}/{to}/unmatched', [
+    'uses' => 'InvoicesController@printUnmatched'
+]);
+
+/*
+ * Trackings
+ */
+
+// Report 3
+Route::get('/trackings/{from}/{to}/unmatched', [
+    'uses' => 'TrackingsController@printUnmatched'
+]);
