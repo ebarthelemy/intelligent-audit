@@ -83,7 +83,7 @@
                     </div>
 
                     <div class="links m-b-md">
-                        <a href="https://github.com/ebarthelemy/intelligent-audit">GitHub</a>
+                        <a href="https://github.com/ebarthelemy/intelligent-audit" target="_blank">GitHub</a>
                     </div>
 
                     <ul class="nav nav-tabs">
