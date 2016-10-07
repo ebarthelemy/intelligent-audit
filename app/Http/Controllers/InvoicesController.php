@@ -38,7 +38,7 @@ class InvoicesController extends Controller
           FROM invoice_headers AS h
           WHERE h.invoice_date BETWEEN ? AND ?;
         ', [$from, $to]); // Using a Raw SQL Expression
-        
+
         $total = DB::select('
           SELECT
             COUNT(h.invoice_num) as number_of_invoices,
