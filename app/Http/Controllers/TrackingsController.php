@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class TrackingsController extends Controller
 {
@@ -22,8 +23,8 @@ class TrackingsController extends Controller
             'from' => 'date_format:n-j-Y',
             'to' => 'date_format:n-j-Y'
         ]);
-        $from = $request->from;
-        $to = $request->to;
+        $from = Carbon::createFromFormat('n-j-Y', $request->from)->format('Y-m-d');
+        $to = Carbon::createFromFormat('n-j-Y', $request->to)->format('Y-m-d');
 
         // Trackings
         $trackings = DB::select('
@@ -44,6 +45,14 @@ class TrackingsController extends Controller
           HAVING d.detail_amount != charge_amount_total;
         ', [$from, $to]); // Using a Raw SQL Expression
 
-        return $trackings;
+        // Response
+        $response = [
+            'reportNum' => 3,
+            'dates' => ['from' => $from, 'to' => $to],
+            'fields' => ['Invoice Num', 'Invoice Date', 'Tracking No', 'Detail Amount ($)', 'Charge Amount TOTAL ($)', 'Discrepancy Amount ($)'],
+            'list' => $trackings
+        ];
+
+        return $response;
     }
 }

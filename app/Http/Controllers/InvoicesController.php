@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests;
 use App\Invoice;
+use Carbon\Carbon;
 
 
 class InvoicesController extends Controller
@@ -23,13 +24,40 @@ class InvoicesController extends Controller
             'from' => 'date_format:n-j-Y',
             'to' => 'date_format:n-j-Y'
         ]);
-        $from = $request->from;
-        $to = $request->to;
+        $from = Carbon::createFromFormat('n-j-Y', $request->from)->format('Y-m-d');
+        $to = Carbon::createFromFormat('n-j-Y', $request->to)->format('Y-m-d');
 
         // Invoices
-        $invoices = Invoice::whereBetween('invoice_date', [$from, $to])->get(); // Using the Query Builder
+        //$invoices = Invoice::whereBetween('invoice_date', [$from, $to])->get(); // Using the Query Builder
 
-        return $invoices;
+        $invoices = DB::select('
+          SELECT
+            h.invoice_num,
+            h.invoice_date,
+            h.invoice_amount
+          FROM invoice_headers AS h
+          WHERE h.invoice_date BETWEEN ? AND ?;
+        ', [$from, $to]); // Using a Raw SQL Expression
+        
+        $total = DB::select('
+          SELECT
+            COUNT(h.invoice_num) as number_of_invoices,
+            SUM(h.invoice_amount) as total_amount
+          FROM invoice_headers AS h
+          WHERE h.invoice_date BETWEEN ? AND ?;
+        ', [$from, $to]); // Using a Raw SQL Expression
+
+        // Response
+        $response = [
+            'reportNum' => 1,
+            'dates' => ['from' => $from, 'to' => $to],
+            'fields' => ['Invoice Num', 'Invoice Date', 'Invoice Amount ($)'],
+            'list' => $invoices,
+            'totalFields' => ['Number of Invoices', 'TOTAL Amount ($)'],
+            'totalList' => $total
+        ];
+
+        return $response;
     }
 
     /**
@@ -45,8 +73,8 @@ class InvoicesController extends Controller
             'from' => 'date_format:n-j-Y',
             'to' => 'date_format:n-j-Y'
         ]);
-        $from = $request->from;
-        $to = $request->to;
+        $from = Carbon::createFromFormat('n-j-Y', $request->from)->format('Y-m-d');
+        $to = Carbon::createFromFormat('n-j-Y', $request->to)->format('Y-m-d');
 
         // Invoices
         $invoices = DB::select('
@@ -64,6 +92,14 @@ class InvoicesController extends Controller
           HAVING h.invoice_amount != detail_amount_total;
         ', [$from, $to]); // Using a Raw SQL Expression
 
-        return $invoices;
+        // Response
+        $response = [
+            'reportNum' => 2,
+            'dates' => ['from' => $from, 'to' => $to],
+            'fields' => ['Invoice Num', 'Invoice Date', 'Invoice Amount ($)', 'Detail Amount TOTAL ($)', 'Discrepancy Amount ($)'],
+            'list' => $invoices
+        ];
+
+        return $response;
     }
 }

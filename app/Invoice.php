@@ -22,6 +22,13 @@ class Invoice extends Model
     public $timestamps = false;
 
     /**
+     * The storage format of the model's date columns.
+     *
+     * @var string
+     */
+    protected $dateFormat = 'Y-m-d';
+
+    /**
      * Get the invoice header date.
      *
      * @param  string $value

@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\InvoiceHeader;
+use App\Invoice;
 
 class InvoiceHeadersTableSeeder extends Seeder
 {
@@ -12,14 +12,14 @@ class InvoiceHeadersTableSeeder extends Seeder
      */
     public function run()
     {
-        $invoiceHeader1 = new InvoiceHeader([
+        $invoiceHeader1 = new Invoice([
             'invoice_num' => '00551198',
             'invoice_amount' => 150.5
         ]);
         $invoiceHeader1->invoice_date = '1/1/2014';
         $invoiceHeader1->save();
 
-        $invoiceHeader2 = new InvoiceHeader([
+        $invoiceHeader2 = new Invoice([
             'invoice_num' => '00551199',
             'invoice_amount' => 10
         ]);

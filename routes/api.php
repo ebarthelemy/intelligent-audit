@@ -16,3 +16,26 @@ use Illuminate\Http\Request;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:api');
+
+/*
+ * Invoices
+ */
+
+// Report 1
+Route::get('/invoices/{from}/{to}', [
+    'uses' => 'InvoicesController@printAll'
+]);
+
+// Report 2
+Route::get('/invoices/{from}/{to}/unmatched', [
+    'uses' => 'InvoicesController@printUnmatched'
+]);
+
+/*
+ * Trackings
+ */
+
+// Report 3
+Route::get('/trackings/{from}/{to}/unmatched', [
+    'uses' => 'TrackingsController@printUnmatched'
+]);
